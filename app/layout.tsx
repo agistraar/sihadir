@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
@@ -20,7 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body
+        className={clsx(
+          inter.className,
+          'scrollbar-thin scrollbar-thumb-gray-500 scrollbar-thumb-rounded-2xl bg-gray-200'
+        )}
+      >
+        {children}
+      </body>
     </html>
   );
 }

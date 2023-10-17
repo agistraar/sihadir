@@ -13,6 +13,10 @@ body,
   background: linear-gradient(to bottom right, #158ad4, #39eadd);
 }
 
+.menu-gradient:hover {
+  background: linear-gradient(to bottom right, #158ad4, #39eadd);
+}
+
 .primary-blue {
   color: #158ad4;
 }
