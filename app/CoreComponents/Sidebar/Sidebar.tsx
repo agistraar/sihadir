@@ -12,20 +12,18 @@ type sidebar = {
 const Sidebar = ({ visible, isFull }: sidebar) => {
   return (
     <div
-      className={`w-3/5 sm:w-[250px] bottom-0 ${
+      className={`w-[250px] bottom-0 transition-all duration-300  ${
         visible ? 'left-0' : '-left-[242px]'
-      } sm:left-0 transition-all ${
-        isFull ? 'h-[90%]' : 'h-screen'
-      } p-4 fixed z-20`}
+      } md:left-0 ${isFull ? 'h-[90%]' : 'h-screen '} p-4 fixed z-20`}
     >
       <div className='w-full h-full relative rounded-xl shadow shadow-gray-400 box-border bg-white pt-2 pl-4 overflow-hidden'>
         <div
           className={clsx(
-            'w-full h-[6%] sm:h-[10%] pl-4',
-            isFull ? 'hidden' : 'block'
+            'w-full h-12 pl-4 transition-all duration-300 ',
+            isFull ? '-mt-[48px]' : 'mt-0'
           )}
         >
-          <div className='w-[50%] sm:w-[70%] h-full relative'>
+          <div className='w-36 h-12 relative'>
             <Image
               alt='Logo'
               fill
@@ -36,19 +34,45 @@ const Sidebar = ({ visible, isFull }: sidebar) => {
             />
           </div>
         </div>
-        <div className='w-full h-full overflow-x-hidden overflow-y-hidden hover:overflow-y-auto hover:scrollbar-thin scrollbar-thumb-gray-200 scrollbar-thumb-rounded-2xl'>
+        <div className='w-full h-full mt-2 overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-thumb-rounded-2xl'>
           <div>
             <ul>
               <SideMenu
-                icons={<Monitor />}
+                icons={<Monitor className='w-5 h-5' />}
                 label='Dashboard'
                 link='/Dashboard'
+                role='dosen'
               />
-              <SideMenu icons={<Clock />} label='Absensi' link='/Absensi' />
-              <SideMenu icons={<Calendar />} label='Jadwal' link='/Jadwal' />
-              <SideMenu icons={<User />} label='Mahasiswa' link='/Mahasiswa' />
-              <SideMenu icons={<Users />} label='Kelas' link='/Kelas' />
-              <SideMenu icons={<BookOpen />} label='Dosen' link='/Dosen' />
+              <SideMenu
+                icons={<Clock className='w-5 h-5' />}
+                label='Presensi'
+                link='/Presensi'
+                role='dosen'
+              />
+              <SideMenu
+                icons={<Calendar className='w-5 h-5' />}
+                label='Jadwal'
+                link='/Jadwal'
+                role='dosen'
+              />
+              <SideMenu
+                icons={<User className='w-5 h-5' />}
+                label='Mahasiswa'
+                link='/Mahasiswa'
+                role='dosen'
+              />
+              <SideMenu
+                icons={<Users className='w-5 h-5' />}
+                label='Dosen'
+                link='/Dosen'
+                role='dosen'
+              />
+              <SideMenu
+                icons={<BookOpen className='w-5 h-5' />}
+                label='Kelas'
+                link='/Kelas'
+                role='dosen'
+              />
             </ul>
           </div>
         </div>

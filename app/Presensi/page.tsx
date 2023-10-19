@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../CoreComponents/Header';
 
-const Dosen = () => {
+const Presensi = () => {
   return (
     <div className='w-full h-screen'>
       <Header />
@@ -10,4 +10,4 @@ const Dosen = () => {
   );
 };
 
-export default Dosen;
+export default Presensi;

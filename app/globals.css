@@ -9,6 +9,14 @@ body,
   overflow-x: hidden;
 }
 
+@media (min-width: 768px) {
+  .calculated-width {
+    width: -webkit-calc(100% - 250px);
+    width: -moz-calc(100% - 250px);
+    width: calc(100% - 250px);
+  }
+}
+
 .custom-gradient {
   background: linear-gradient(to bottom right, #158ad4, #39eadd);
 }

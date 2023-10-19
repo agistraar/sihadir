@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from '../CoreComponents/Header';
-import { ArrowUpCircle } from 'react-feather';
 
 const Dashboard = () => {
   return (
