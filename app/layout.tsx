@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={clsx(
           inter.className,
-          'scrollbar-thin scrollbar-thumb-gray-500 scrollbar-thumb-rounded-2xl bg-gray-200'
+          'scrollbar-thin scrollbar-thumb-gray-500 scrollbar-thumb-rounded-2xl bg-gray-200 text-black'
         )}
       >
         {children}

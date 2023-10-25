@@ -6,22 +6,23 @@ import Sidebar from './Sidebar/Sidebar';
 import useOnScreen from '../CustomHooks/useOnScreen';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Header = () => {
-  const [visibleSidebar, setVisibleSidebar] = React.useState(true);
+  const [visibleSidebar, setVisibleSidebar] = React.useState(false);
   const [profileVisible, setProfileVisible] = React.useState(false);
 
   const ref = React.useRef<HTMLDivElement>(null);
   const isVisible = useOnScreen(ref);
   const router = useRouter();
+  const role = useSearchParams().get('role');
 
   return (
     <div
       ref={ref}
-      className='w-full h-[10%] min-h-[50px] custom-gradient flex items-center px-4'
+      className='w-full h-[10%] min-h-[50px] custom-gradient flex items-center px-4 relative'
     >
-      <Sidebar visible={visibleSidebar} isFull={isVisible} />
+      <Sidebar visible={visibleSidebar} isFull={isVisible} role={role!} />
       <div className='h-full w-1/2 flex flex-row items-center space-x-2'>
         <Menu
           className='block md:hidden'
@@ -88,13 +89,13 @@ const Header = () => {
           </div>
         </div>
       </div>
-      {!isVisible && (
+      {/* {!isVisible && (
         <ArrowUpCircle
           size={36}
           className='absolute bottom-2 right-2'
           onClick={() => document.body.scrollTo(0, 0)}
         />
-      )}
+      )} */}
     </div>
   );
 };

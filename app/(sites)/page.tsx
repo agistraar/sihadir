@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const Login = () => {
   return (
-    <div className='w-full h-screen flex flex-col'>
+    <div className='w-full h-screen flex flex-col '>
       <div className='w-full sm:w-4/6 h-3/6 sm:h-full custom-gradient flex flex-col items-center sm:items-start justify-center pb-24 sm:pb-0 sm:pt-24'>
         <div className='w-4/6 h-3/6 sm:w-[12%] sm:h-1/6  sm:absolute left-2 top-0 relative'>
           <Image

@@ -21,6 +21,10 @@ body,
   background: linear-gradient(to bottom right, #158ad4, #39eadd);
 }
 
+.text-custom-gradient {
+  @apply text-transparent bg-clip-text bg-gradient-to-br from-[#158ad4] to-[#39eadd];
+}
+
 .menu-gradient:hover {
   background: linear-gradient(to bottom right, #158ad4, #39eadd);
 }

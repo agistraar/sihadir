@@ -70,8 +70,10 @@ export const CachedDetail = memo(function CachedDetail() {
 
 export const CachedConfirm = memo(function CachedConfirm() {
   return (
-    <div className='w-full flex justify-center hover:-translate-y-[1px] duration-200 cursor-pointer'>
-      <CheckCircle />
+    <div className='w-full flex justify-center'>
+      <div className='hover:-translate-y-[1px] duration-200 cursor-pointer'>
+        <CheckCircle />
+      </div>
     </div>
   );
 });

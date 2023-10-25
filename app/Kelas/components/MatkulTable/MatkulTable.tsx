@@ -16,7 +16,7 @@ const MatkulTable = () => {
   return (
     <div className='w-full md:w-[60%] bg-white rounded-2xl p-4 flex flex-col sm:flex-row-reverse items-center sm:justify-between'>
       <div className='w-full sm:w-2/5 h-2/5 sm:h-full flex justify-center sm:justify-end'>
-        <div className='h-40 sm:h-38 w-32 sm:w-36 relative'>
+        <div className='h-36 sm:h-40 w-32 sm:w-36 mb-4 sm:mb-0 relative'>
           <Image
             alt='foto'
             fill

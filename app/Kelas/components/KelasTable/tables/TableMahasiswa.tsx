@@ -11,7 +11,6 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   getPaginationRowModel,
-  CellContext,
 } from '@tanstack/react-table';
 import {
   RankingInfo,
@@ -20,13 +19,8 @@ import {
 } from '@tanstack/match-sorter-utils';
 import DebouncedInput from '../components/DebouncedInput';
 import { DataKelas, makeData } from '@/app/utils/fakeData';
-import {
-  CachedConfirm,
-  CachedDetail,
-  CachedNama,
-  CachedNim,
-  CachedStatus,
-} from './TableColumns';
+import { CachedNama, CachedNim, CachedStatus } from './TableColumns';
+import { Search } from 'react-feather';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -69,7 +63,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 //   val: CellContext<DataKelas, unknown>;
 // };
 
-const TableDosen = () => {
+const TableMahasiswa = () => {
   const rerender = React.useReducer(() => ({}), {})[1];
 
   const [globalFilter, setGlobalFilter] = React.useState('');
@@ -114,24 +108,6 @@ const TableDosen = () => {
         header: () => 'Status',
         cell: (info) => <CachedStatus val={info} />,
       },
-      {
-        accessorKey: 'detail',
-        header: () => 'Detail',
-        cell: () => <CachedDetail />,
-      },
-      {
-        accessorKey: 'konfirmasi',
-        header: () => 'Konfirmasi',
-        cell: (info) => {
-          return info.getValue() ? (
-            <CachedConfirm />
-          ) : (
-            <div className='w-full flex justify-center cursor-default'>
-              <p>-</p>
-            </div>
-          );
-        },
-      },
     ],
     []
   );
@@ -175,16 +151,17 @@ const TableDosen = () => {
   }, [table]);
   return (
     <div>
-      <div className='w-full flex items-center justify-end my-2 '>
+      <div className='w-full flex items-center justify-end space-x-2 my-2 '>
+        <Search className='text-gray-400' />
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
-          className='px-2 py-1 w-2/3 sm:w-fit border-2 border-block rounded-lg'
+          className='px-2 py-1 w-2/4 sm:w-fit border-2 border-block rounded-lg'
           placeholder='Cari'
         />
       </div>
       <div className='p-2 w-full overflow-x-auto sm:overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-thumb-rounded-2xl'>
-        <table className='w-[150%] sm:w-full text-gray-500'>
+        <table className='w-full text-gray-500'>
           <thead className='border-b-2 text-base'>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -218,4 +195,4 @@ const TableDosen = () => {
   );
 };
 
-export default TableDosen;
+export default TableMahasiswa;

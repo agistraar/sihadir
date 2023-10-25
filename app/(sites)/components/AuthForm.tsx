@@ -11,6 +11,7 @@ const AuthForm = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isValid },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -83,7 +84,7 @@ const AuthForm = () => {
                 large
                 onClick={() => {
                   if (isValid) {
-                    router.replace('Dashboard');
+                    router.replace(`Dashboard?role=${getValues('noInduk')}`);
                   }
                 }}
               >
