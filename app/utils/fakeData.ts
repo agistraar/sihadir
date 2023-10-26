@@ -7,6 +7,15 @@ export type DataKelas = {
   konfirmasi: boolean;
 };
 
+export type DataKompen = {
+  nama: string;
+  nim: string;
+  alpa: number;
+  izin: number;
+  sakit: number;
+  jumlah: number;
+};
+
 const range = (len: number) => {
   const arr = [];
   for (let i = 0; i < len; i++) {
@@ -24,6 +33,17 @@ const newKelas = (): DataKelas => {
   };
 };
 
+const newKompen = (): DataKompen => {
+  return {
+    nama: faker.person.fullName(),
+    nim: '3202116025',
+    alpa: faker.number.int({ min: 1, max: 20 }),
+    izin: faker.number.int({ min: 1, max: 20 }),
+    sakit: faker.number.int({ min: 1, max: 20 }),
+    jumlah: faker.number.int({ min: 10, max: 60 }),
+  };
+};
+
 export function makeData(...lens: number[]) {
   const makeDataLevel = (depth = 0): DataKelas[] => {
     const len = lens[depth]!;
@@ -33,6 +53,17 @@ export function makeData(...lens: number[]) {
       };
     });
   };
+  return makeDataLevel();
+}
 
+export function makeKompen(...lens: number[]) {
+  const makeDataLevel = (depth = 0): DataKompen[] => {
+    const len = lens[depth]!;
+    return range(len).map((d): DataKompen => {
+      return {
+        ...newKompen(),
+      };
+    });
+  };
   return makeDataLevel();
 }

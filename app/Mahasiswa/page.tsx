@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from '../CoreComponents/Header';
 import { notFound } from 'next/navigation';
+import Footer from '../CoreComponents/Footer';
+import KompenTable from './KompenTable/KompenTable';
 
 const Mahasiswa = ({
   params,
@@ -17,7 +19,12 @@ const Mahasiswa = ({
   return (
     <div className='w-full h-screen '>
       <Header />
-      <div className='h-[200%]'></div>
+      <div className='absolute w-full calculated-width md:right-0 '>
+        <div className='w-full h-full flex flex-col space-y-4'>
+          <KompenTable />
+        </div>
+        <Footer />
+      </div>
     </div>
   );
 };

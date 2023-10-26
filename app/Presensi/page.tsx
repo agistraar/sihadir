@@ -1,11 +1,15 @@
 import React from 'react';
 import Header from '../CoreComponents/Header';
+import Footer from '../CoreComponents/Footer';
 
 const Presensi = () => {
   return (
     <div className='w-full h-screen '>
       <Header />
-      <div className='h-[200%]'></div>
+      <div className='absolute w-full h-full calculated-width md:right-0 '>
+        <div className='w-full h-full flex flex-col'>{/* Konten */}</div>
+        <Footer />
+      </div>
     </div>
   );
 };

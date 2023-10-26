@@ -4,6 +4,7 @@ import MatkulTable from './components/MatkulTable/MatkulTable';
 import TokenContainer from './components/TokenContainer';
 import KelasTable from './components/KelasTable/KelasTable';
 import { notFound } from 'next/navigation';
+import Footer from '../CoreComponents/Footer';
 
 const Kelas = ({
   params,
@@ -19,14 +20,19 @@ const Kelas = ({
   }
 
   return (
-    <div className='w-full h-screen '>
+    <div className='w-full h-screen'>
       <Header />
-      <div className='absolute w-full calculated-width md:right-0 py-4 px-2 flex flex-col space-y-4'>
-        <div className='w-full flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 box-border'>
-          <MatkulTable />
-          <TokenContainer />
+      <div className='absolute w-full calculated-width md:right-0'>
+        <div className='w-full h-full flex flex-col space-y-4'>
+          <div className='w-full flex flex-col space-y-4 md:flex-row md:space-x-4 mt-4 md:space-y-0 px-2 box-border'>
+            <MatkulTable />
+            <TokenContainer />
+          </div>
+          <div className='w-full px-2'>
+            <KelasTable />
+          </div>
         </div>
-        <KelasTable />
+        <Footer />
       </div>
     </div>
   );

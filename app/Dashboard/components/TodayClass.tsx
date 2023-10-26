@@ -61,9 +61,9 @@ const TodayClass = () => {
         ))} */}
       <Link
         href={{ pathname: 'Jadwal', query: { role: role } }}
-        className='text-xs text-blue-500 underline absolute bottom-2 right-2'
+        className='text-xs font-medium text-blue-500 underline absolute bottom-2 right-2'
       >
-        Liat Lebih Banyak
+        Lihat Lebih Banyak
       </Link>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../CoreComponents/Header';
 import { notFound } from 'next/navigation';
+import Footer from '../CoreComponents/Footer';
 
 const Dosen = ({
   params,
@@ -17,7 +18,10 @@ const Dosen = ({
   return (
     <div className='w-full h-screen '>
       <Header />
-      <div className='h-[200%]'></div>
+      <div className='absolute w-full h-full calculated-width md:right-0 '>
+        <div className='w-full h-full flex flex-col'>{/* Konten */}</div>
+        <Footer />
+      </div>
     </div>
   );
 };

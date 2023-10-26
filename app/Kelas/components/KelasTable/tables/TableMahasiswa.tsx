@@ -17,7 +17,7 @@ import {
   compareItems,
   rankItem,
 } from '@tanstack/match-sorter-utils';
-import DebouncedInput from '../components/DebouncedInput';
+import DebouncedInput from '@/app/CoreComponents/DebouncedInput';
 import { DataKelas, makeData } from '@/app/utils/fakeData';
 import { CachedNama, CachedNim, CachedStatus } from './TableColumns';
 import { Search } from 'react-feather';
