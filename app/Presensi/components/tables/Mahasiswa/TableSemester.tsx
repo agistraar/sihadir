@@ -18,16 +18,15 @@ import {
   compareItems,
   rankItem,
 } from '@tanstack/match-sorter-utils';
-import DebouncedInput from '@/app/CoreComponents/DebouncedInput';
-import { DataKelas, makeData } from '@/app/utils/fakeData';
 import {
-  CachedConfirm,
-  CachedDetail,
-  CachedNama,
-  CachedNim,
-  CachedStatus,
-} from './TableColumns';
+  DataKelas,
+  DataPresensiMingguan,
+  makePresensiMingguan,
+} from '@/app/utils/fakeData';
+import { CachedJum, CachedNama, CachedNum, CachedStatus } from '../Columns';
 import KonfirmasiAbsen from '@/app/CoreComponents/Modals/KonfirmasiAbsen';
+import { FieldValues, useForm } from 'react-hook-form';
+import InputSelect from '@/app/CoreComponents/InputSelect';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -70,14 +69,17 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 //   val: CellContext<DataKelas, unknown>;
 // };
 
-const TableDosen = () => {
+const TableSemester = () => {
   const rerender = React.useReducer(() => ({}), {})[1];
 
-  const [globalFilter, setGlobalFilter] = React.useState('');
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [modalData, setModalData] = React.useState({ nim: '', nama: '' });
+  const [data, setData] = React.useState<DataPresensiMingguan[]>([]);
+  const refreshData = () => setData(() => makePresensiMingguan(16));
 
-  const columns = React.useMemo<ColumnDef<DataKelas>[]>(
+  React.useEffect(() => {
+    setData(() => makePresensiMingguan(16));
+  }, []);
+
+  const columns = React.useMemo<ColumnDef<DataPresensiMingguan>[]>(
     () => [
       {
         accessorKey: 'no',
@@ -93,62 +95,51 @@ const TableDosen = () => {
         ),
       },
       {
-        accessorKey: 'nim',
+        accessorKey: 'minggu',
         header: () => (
           <div className='w-full flex justify-center'>
-            <p>NIM</p>
+            <p>Minggu</p>
           </div>
         ),
-        cell: (info) => <CachedNim val={info} />,
+        cell: (info) => (
+          <div className='w-full flex justify-center'>
+            <p>Minggu ke-{Number(info.row.id) + 1}</p>
+          </div>
+        ),
       },
       {
-        accessorKey: 'nama',
-        header: () => (
-          <div className='w-full flex justify-center'>
-            <p>Nama Mahasiswa</p>
-          </div>
-        ),
-        cell: (info) => <CachedNama val={info} />,
-        filterFn: 'fuzzy',
-        sortingFn: fuzzySort,
+        accessorKey: 'total',
+        header: () => 'Total',
+        cell: (info) => <CachedJum val={info} />,
+      },
+      {
+        accessorKey: 'hadir',
+        header: () => 'Hadir',
+        cell: (info) => <CachedNum val={info} />,
+      },
+      {
+        accessorKey: 'alpa',
+        header: () => 'Alpa',
+        cell: (info) => <CachedNum val={info} />,
+      },
+      {
+        accessorKey: 'izin',
+        header: () => 'Izin',
+        cell: (info) => <CachedNum val={info} />,
+      },
+      {
+        accessorKey: 'sakit',
+        header: () => 'Sakit',
+        cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'status',
         header: () => 'Status',
-        cell: (info) => <CachedStatus val={info} />,
-      },
-      {
-        accessorKey: 'detail',
-        header: () => 'Detail',
-        cell: () => <CachedDetail />,
-      },
-      {
-        accessorKey: 'konfirmasi',
-        header: () => 'Konfirmasi',
-        cell: (info) => {
-          return info.getValue() ? (
-            <CachedConfirm
-              setVisible={setModalVisible}
-              val={info}
-              setData={setModalData}
-            />
-          ) : (
-            <div className='w-full flex justify-center cursor-default'>
-              <p>-</p>
-            </div>
-          );
-        },
+        cell: (info) => <CachedStatus val={Number(info.getValue())} />,
       },
     ],
     []
   );
-
-  const [data, setData] = React.useState<DataKelas[]>([]);
-  const refreshData = () => setData((old) => makeData(27));
-
-  React.useEffect(() => {
-    setData(() => makeData(27));
-  }, []);
 
   const table = useReactTable({
     data,
@@ -161,10 +152,6 @@ const TableDosen = () => {
         pageSize: 30,
       },
     },
-    state: {
-      globalFilter,
-    },
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -172,30 +159,56 @@ const TableDosen = () => {
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: true,
   });
+  const semesterOption = [
+    {
+      label: 'Semester 1',
+      value: '1',
+    },
+    {
+      label: 'Semester 2',
+      value: '2',
+    },
+    {
+      label: 'Semester 3',
+      value: '3',
+    },
+    {
+      label: 'Semester 4',
+      value: '4',
+    },
+    {
+      label: 'Semester 5',
+      value: '5',
+    },
+    {
+      label: 'Semester 6',
+      value: '6',
+    },
+  ];
 
-  React.useEffect(() => {
-    if (table.getState().columnFilters[0]?.id === 'nama') {
-      if (table.getState().sorting[0]?.id !== 'nama') {
-        table.setSorting([{ id: 'nama', desc: false }]);
-      }
-    }
-  }, [table]);
+  const {
+    register,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      minggu: semesterOption[0].value,
+    },
+  });
+
   return (
     <div>
-      <KonfirmasiAbsen
-        isVisible={modalVisible}
-        nim={modalData.nim}
-        name={modalData.nama}
-        setIsVisible={setModalVisible}
-      />
-      <div className='w-full flex items-center justify-end my-2 '>
-        <DebouncedInput
-          value={globalFilter ?? ''}
-          onChange={(value) => setGlobalFilter(String(value))}
-          className='px-2 py-1 w-2/3 sm:w-fit border-2 border-block rounded-lg'
-          placeholder='Cari'
+      <form
+        id='sortFormSemester'
+        className='w-full flex items-center justify-start space-x-2'
+      >
+        <InputSelect
+          id='semesterTableSemester'
+          formId='sortFormSemester'
+          register={register}
+          label='Semester'
+          options={semesterOption}
         />
-      </div>
+      </form>
       <div className='p-2 w-full overflow-x-auto sm:overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-thumb-rounded-2xl'>
         <table className='w-[150%] sm:w-full text-gray-500'>
           <thead className='border-b-2 text-base'>
@@ -231,4 +244,4 @@ const TableDosen = () => {
   );
 };
 
-export default TableDosen;
+export default TableSemester;

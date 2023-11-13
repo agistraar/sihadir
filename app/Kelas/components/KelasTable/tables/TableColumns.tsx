@@ -10,6 +10,12 @@ type colData = {
   val: CellContext<DataKelas, unknown>;
 };
 
+type konfirParams = {
+  setVisible: Function;
+  val: CellContext<DataKelas, unknown>;
+  setData: Function;
+};
+
 export const CachedNim = memo(function CachedNim({ val }: colData) {
   return (
     <div className='w-full flex justify-center px-2'>
@@ -68,10 +74,20 @@ export const CachedDetail = memo(function CachedDetail() {
   );
 });
 
-export const CachedConfirm = memo(function CachedConfirm() {
+export const CachedConfirm = memo(function CachedConfirm({
+  setVisible,
+  val,
+  setData,
+}: konfirParams) {
   return (
     <div className='w-full flex justify-center'>
-      <div className='hover:-translate-y-[1px] duration-200 cursor-pointer'>
+      <div
+        className='hover:-translate-y-[1px] duration-200 cursor-pointer'
+        onClick={() => {
+          setData({ nama: val.row.original.nama, nim: val.row.original.nim });
+          setVisible(true);
+        }}
+      >
         <CheckCircle />
       </div>
     </div>

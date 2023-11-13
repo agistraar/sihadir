@@ -1,29 +1,29 @@
 import React from 'react';
 import Header from '../CoreComponents/Header';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Footer from '../CoreComponents/Footer';
-import KompenTable from './KompenTable/KompenTable';
+import { getServerSession } from 'next-auth';
+import { options } from '../api/auth/[...nextauth]/options';
+import TableList from './components/TableList/TableList';
 
-const Mahasiswa = ({
-  params,
-  searchParams,
-}: {
-  params: { role: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) => {
-  const role = searchParams?.role;
+const Mahasiswa = async () => {
+  const session = await getServerSession(options);
 
-  if (role === 'mahasiswa') {
+  if (!session) {
+    redirect('/api/auth/signin?callbackUrl=/server');
+  }
+
+  if (session.user.role === 3) {
     return notFound();
   }
   return (
     <div className='w-full h-screen '>
-      <Header />
-      <div className='absolute w-full calculated-width md:right-0 '>
-        <div className='w-full h-full flex flex-col space-y-4'>
-          <KompenTable />
+      <Header role={session.user.role} nama={session.user.name} />
+      <div className='w-full flex flex-row-reverse'>
+        <div className=' w-full calculated-width '>
+          <TableList />
+          <Footer />
         </div>
-        <Footer />
       </div>
     </div>
   );

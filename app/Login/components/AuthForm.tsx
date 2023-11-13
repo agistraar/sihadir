@@ -5,9 +5,12 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'react-feather';
+import { signIn } from 'next-auth/react';
 
 const AuthForm = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
+  const [error, setError] = React.useState('');
   const {
     register,
     handleSubmit,
@@ -22,12 +25,30 @@ const AuthForm = () => {
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setIsLoading(true);
+    const res = await signIn('credentials', {
+      redirect: false,
+      noInduk: data.noInduk,
+      password: data.password,
+    });
+
+    if (res?.error) {
+      setError(res.error);
+      setIsLoading(false);
+    }
+    if (res?.ok) {
+      router.replace('Dashboard');
+    }
   };
 
   return (
     <div className='sm:mx-auto w-full flex flex-col justify-center'>
+      {error !== '' && (
+        <div className='w-full bg-gradient-to-bl from-orange-500 to-red-500 text-white rounded-2xl font-bold px-4 py-6'>
+          {error}
+        </div>
+      )}
       <h2 className='mt-6 text-2xl font-bold tracking-tight text-black'>
         Login to your account
       </h2>
@@ -78,16 +99,7 @@ const AuthForm = () => {
               )}
             </div>
             <div className='mt-6'>
-              <Button
-                type='submit'
-                fullWidth
-                large
-                onClick={() => {
-                  if (isValid) {
-                    router.replace(`Dashboard?role=${getValues('noInduk')}`);
-                  }
-                }}
-              >
+              <Button type='submit' fullWidth disabled={isLoading} large>
                 Masuk
               </Button>
             </div>

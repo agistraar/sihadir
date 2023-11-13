@@ -7,7 +7,7 @@ import React from 'react';
 type sidebar = {
   visible: boolean;
   isFull: boolean;
-  role: string;
+  role: number;
 };
 
 const Sidebar = ({ visible, isFull, role }: sidebar) => {
@@ -42,42 +42,40 @@ const Sidebar = ({ visible, isFull, role }: sidebar) => {
                 icons={<Monitor className='w-5 h-5' />}
                 label='Dashboard'
                 link='/Dashboard'
-                role={role}
               />
-              <SideMenu
-                icons={<Clock className='w-5 h-5' />}
-                label='Presensi'
-                link='/Presensi'
-                role={role}
-              />
-              <SideMenu
-                icons={<Calendar className='w-5 h-5' />}
-                label='Jadwal'
-                link='/Jadwal'
-                role={role}
-              />
-              {role !== 'mahasiswa' && (
+              {role !== 0 && (
+                <SideMenu
+                  icons={<Clock className='w-5 h-5' />}
+                  label='Presensi'
+                  link='/Presensi'
+                />
+              )}
+              {role !== 0 && (
+                <SideMenu
+                  icons={<Calendar className='w-5 h-5' />}
+                  label='Jadwal'
+                  link='/Jadwal'
+                />
+              )}
+              {role !== 3 && (
                 <SideMenu
                   icons={<User className='w-5 h-5' />}
                   label='Mahasiswa'
                   link='/Mahasiswa'
-                  role={role}
                 />
               )}
-              {role === 'admin' || role === 'kaprodi' ? (
+              {role === 0 || role === 1 ? (
                 <SideMenu
                   icons={<Users className='w-5 h-5' />}
                   label='Dosen'
                   link='/Dosen'
-                  role={role}
                 />
               ) : null}
-              {role !== 'admin' && (
+              {role !== 0 && (
                 <SideMenu
                   icons={<BookOpen className='w-5 h-5' />}
                   label='Kelas'
                   link='/Kelas'
-                  role={role}
                 />
               )}
             </ul>

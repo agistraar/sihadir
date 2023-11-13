@@ -11,6 +11,7 @@ interface ButtonProps {
   disabled?: boolean;
   large?: boolean;
   white?: boolean;
+  red?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   large,
   white,
+  red,
 }) => {
   return (
     <button
@@ -33,9 +35,10 @@ const Button: React.FC<ButtonProps> = ({
         disabled && `opacity-50 cursor-default`,
         fullWidth && `w-full`,
         secondary && 'text-white bg-gray-500',
-        !secondary && !white && 'custom-gradient text-white',
+        !secondary && !white && !red && 'custom-gradient text-white',
         large ? `py-3 md:py-3.5 text-xs md:text-md` : `py-1.5 md:py-2 text-xs`,
-        white && 'bg-white border '
+        white && 'bg-white border ',
+        red && 'bg-red-500 text-white'
       )}
     >
       {children}

@@ -6,16 +6,37 @@ import Sidebar from './Sidebar/Sidebar';
 import useOnScreen from '../CustomHooks/useOnScreen';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
-const Header = () => {
+type HeaderParams = {
+  role: number;
+  nama: string;
+};
+
+const Header = ({ role, nama }: HeaderParams) => {
   const [visibleSidebar, setVisibleSidebar] = React.useState(false);
   const [profileVisible, setProfileVisible] = React.useState(false);
 
   const ref = React.useRef<HTMLDivElement>(null);
   const isVisible = useOnScreen(ref);
   const router = useRouter();
-  const role = useSearchParams().get('role');
+  let roleString = '';
+
+  switch (role) {
+    case 0:
+      roleString = 'Admin';
+      break;
+    case 1:
+      roleString = 'Kaprodi';
+      break;
+    case 2:
+      roleString = 'Dosen';
+      break;
+    case 3:
+      roleString = 'Mahasiswa';
+      break;
+  }
 
   return (
     <div
@@ -42,7 +63,7 @@ const Header = () => {
       </div>
       <div className='h-full w-1/2 flex flex-row items-center justify-end space-x-2 tracking-wider'>
         <h2 className='text-base font-bold text-white hidden md:block mr-2'>
-          <span className='text-yellow-400'>Hi</span>, Agistra Arifur Rahman
+          <span className='text-yellow-400'>Hi</span>, {nama}
         </h2>
         <Bell color='#ffffff' />
         <div className='h-10 w-10 relative flex-col'>
@@ -60,11 +81,14 @@ const Header = () => {
               profileVisible ? 'opacity-100' : 'opacity-0'
             )}
           >
-            <div className='flex flex-col px-4 py-2 custom-gradient rounded-t-lg'>
-              <p className='text-sm font-bold text-white'>
-                Agistra Arifur Rahman
-              </p>
-              <p className='text-xs text-white'>Mahasiswa</p>
+            <div
+              className={clsx(
+                'flex flex-col px-4 py-2 custom-gradient rounded-t-lg',
+                profileVisible ? 'block' : 'hidden'
+              )}
+            >
+              <p className='text-sm font-bold text-white'>{nama}</p>
+              <p className='text-xs text-white'>{roleString}</p>
             </div>
             <ul
               className={clsx(
@@ -80,7 +104,7 @@ const Header = () => {
               </Link>
               <li
                 className='flex flex-row cursor-pointer items-center space-x-4 hover:bg-gray-200 py-3 px-4 text-sm font-medium rounded-lg'
-                onClick={() => router.replace('/')}
+                onClick={() => signOut({ callbackUrl: '/' })}
               >
                 <LogOut className='w-5 h-5' />
                 <p>Logout</p>

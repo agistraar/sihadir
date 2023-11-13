@@ -1,11 +1,8 @@
-'use client';
 import React from 'react';
 import ListKonfir from './ListKonfir';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 
 const KonfirmasiPresensi = () => {
-  const role = useSearchParams().get('role');
   const data = [
     {
       tipe: 'Izin',
@@ -21,20 +18,20 @@ const KonfirmasiPresensi = () => {
       semester: '5',
       kelas: 'C',
     },
-    // {
-    //   tipe: 'Sakit',
-    //   nama: 'Haafizhar Alfathan Syauqi',
-    //   nim: '3202116132',
-    //   semester: '5',
-    //   kelas: 'B',
-    // },
-    // {
-    //   tipe: 'Izin',
-    //   nama: 'Azlinya Asyifa',
-    //   nim: '3202116010',
-    //   semester: '5',
-    //   kelas: 'C',
-    // },
+    {
+      tipe: 'Sakit',
+      nama: 'Haafizhar Alfathan Syauqi',
+      nim: '3202116132',
+      semester: '5',
+      kelas: 'B',
+    },
+    {
+      tipe: 'Izin',
+      nama: 'Azlinya Asyifa',
+      nim: '3202116010',
+      semester: '5',
+      kelas: 'C',
+    },
     // {
     //   tipe: 'Izin',
     //   nama: 'Muhammad Resky Maulana',
@@ -73,7 +70,7 @@ const KonfirmasiPresensi = () => {
         />
       ))}
       <Link
-        href={{ pathname: 'Mahasiswa', query: { role: role } }}
+        href={{ pathname: 'Mahasiswa' }}
         className='text-xs font-medium text-blue-500 underline absolute bottom-2 right-2'
       >
         Lihat Lebih Banyak

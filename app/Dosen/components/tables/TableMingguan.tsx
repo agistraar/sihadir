@@ -12,6 +12,12 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
   CellContext,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFacetedMinMaxValues,
+  ColumnFiltersState,
+  Column,
+  Table,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
 
@@ -20,7 +26,12 @@ import {
   compareItems,
   rankItem,
 } from '@tanstack/match-sorter-utils';
-import { DataKompen, makeKompen } from '@/app/utils/fakeData';
+import {
+  DataKompen,
+  DataMingguan,
+  makeKompen,
+  makeMingguan,
+} from '@/app/utils/fakeData';
 import DebouncedInput from '@/app/CoreComponents/DebouncedInput';
 import {
   ChevronLeft,
@@ -36,8 +47,9 @@ import {
   CachedNim,
   CachedNum,
   CachedStatus,
-} from './KompenColumns';
-
+} from './Columns';
+import InputSelect from '@/app/CoreComponents/InputSelect';
+import { FieldValues, useForm } from 'react-hook-form';
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -79,8 +91,12 @@ type colData = {
   val: CellContext<DataKompen, unknown>;
 };
 
-const TableKompen = () => {
+const TableMingguan = () => {
   const rerender = React.useReducer(() => ({}), {})[1];
+
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
@@ -88,59 +104,60 @@ const TableKompen = () => {
     () => [
       {
         accessorKey: 'No',
-        header: () => <h3>No</h3>,
+        header: () => 'No.',
+        enableSorting: false,
+        enableColumnFilter: false,
         cell: (info) => (
           <p className='text-center'>{Number(info.row.id) + 1}</p>
         ),
       },
       {
         accessorKey: 'nama',
-        header: () => <h3>Nama</h3>,
+        header: () => 'Nama',
         cell: (info) => <CachedNama val={info} />,
+        enableSorting: false,
+        enableColumnFilter: false,
         filterFn: 'fuzzy',
         sortingFn: fuzzySort,
       },
       {
         accessorKey: 'nim',
-        header: () => <h3>NIM</h3>,
+        header: () => 'NIM',
         cell: (info) => <CachedNim val={info} />,
+        enableSorting: false,
+        enableColumnFilter: false,
         filterFn: 'fuzzy',
         sortingFn: fuzzySort,
       },
       {
         accessorKey: 'alpa',
-        header: () => <h3>Alpa</h3>,
+        header: () => 'Alpa',
         cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'izin',
-        header: () => <h3>Izin</h3>,
+        header: () => 'Izin',
         cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'sakit',
-        header: () => <h3>Sakit</h3>,
+        header: () => 'Sakit',
         cell: (info) => <CachedNum val={info} />,
       },
       {
-        accessorKey: 'jumlah',
-        header: () => <h3>Jumlah Kompensasi</h3>,
+        accessorKey: 'total',
+        header: () => 'Total',
         cell: (info) => <CachedJum val={info} />,
-      },
-      {
-        accessorKey: 'status',
-        header: () => <h3>Status</h3>,
-        cell: (props) => <CachedStatus val={props.row.original.jumlah} />,
       },
     ],
     []
   );
 
-  const [data, setData] = React.useState<DataKompen[]>([]);
-  const refreshData = () => setData((old) => makeKompen(50000));
+  const [data, setData] = React.useState<DataMingguan[]>([]);
+  const refreshData = () => setData((old) => makeMingguan(50000));
 
   React.useEffect(() => {
-    setData(() => makeKompen(50000));
+    setData(() => makeMingguan(50000));
   }, []);
 
   const table = useReactTable({
@@ -151,14 +168,21 @@ const TableKompen = () => {
     },
     state: {
       globalFilter,
+      columnFilters,
     },
+    onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    globalFilterFn: fuzzyFilter,
     getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
     debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
   });
 
   React.useEffect(() => {
@@ -169,32 +193,206 @@ const TableKompen = () => {
     }
   }, [table]);
 
+  const mingguOption = [
+    {
+      label: 'Minggu ke-1',
+      value: '1',
+    },
+    {
+      label: 'Minggu ke-2',
+      value: '2',
+    },
+    {
+      label: 'Minggu ke-3',
+      value: '3',
+    },
+    {
+      label: 'Minggu ke-4',
+      value: '4',
+    },
+    {
+      label: 'Minggu ke-5',
+      value: '5',
+    },
+    {
+      label: 'Minggu ke-6',
+      value: '6',
+    },
+    {
+      label: 'Minggu ke-7',
+      value: '7',
+    },
+    {
+      label: 'Minggu ke-8',
+      value: '8',
+    },
+    {
+      label: 'Minggu ke-9',
+      value: '9',
+    },
+    {
+      label: 'Minggu ke-10',
+      value: '10',
+    },
+    {
+      label: 'Minggu ke-11',
+      value: '11',
+    },
+    {
+      label: 'Minggu ke-12',
+      value: '12',
+    },
+    {
+      label: 'Minggu ke-13',
+      value: '13',
+    },
+    {
+      label: 'Minggu ke-14',
+      value: '14',
+    },
+    {
+      label: 'Minggu ke-15',
+      value: '15',
+    },
+    {
+      label: 'Minggu ke-16',
+      value: '16',
+    },
+  ];
+  const semesterOption = [
+    {
+      label: 'Senin',
+      value: '1',
+    },
+    {
+      label: 'Selasa',
+      value: '2',
+    },
+    {
+      label: 'Rabu',
+      value: '3',
+    },
+    {
+      label: 'Kamis',
+      value: '4',
+    },
+    {
+      label: 'Jumat',
+      value: '5',
+    },
+    {
+      label: 'Sabtu',
+      value: '6',
+    },
+  ];
+  const kelasOption = [
+    {
+      label: 'A',
+      value: 'A',
+    },
+    {
+      label: 'B',
+      value: 'B',
+    },
+    {
+      label: 'C',
+      value: 'C',
+    },
+    {
+      label: 'D',
+      value: 'D',
+    },
+    {
+      label: 'E',
+      value: 'E',
+    },
+  ];
+
+  const {
+    register,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      minggu: mingguOption[0].value,
+      semester: semesterOption[0].value,
+      kelas: kelasOption[0].value,
+    },
+  });
+
   return (
     <div>
-      <div className='w-full flex items-center justify-end space-x-2 my-2 '>
-        <Search className='text-gray-400' />
-        <DebouncedInput
-          value={globalFilter ?? ''}
-          onChange={(value) => setGlobalFilter(String(value))}
-          className='px-2 py-1 w-2/4 sm:w-fit border-2 border-block rounded-lg'
-          placeholder='Cari'
+      <form
+        id='sortFormMingguan'
+        className='w-full flex items-center justify-end space-x-2'
+      >
+        <InputSelect
+          id='mingguTableMingguan'
+          formId='sortFormMingguan'
+          register={register}
+          label='Minggu'
+          options={mingguOption}
         />
+        <InputSelect
+          id='semesterTableMingguan'
+          formId='sortFormMingguan'
+          register={register}
+          label='Semester'
+          options={semesterOption}
+        />
+        <InputSelect
+          id='kelasTableMingguan'
+          formId='sortFormMingguan'
+          register={register}
+          label='Kelas'
+          options={kelasOption}
+        />
+      </form>
+      <div className='w-full flex items-center justify-between my-2 '>
+        <Button secondary large>
+          Export PDF
+        </Button>
+        <div className='flex flex-row items-center space-x-2'>
+          <Search className='text-gray-400' />
+          <DebouncedInput
+            value={globalFilter ?? ''}
+            onChange={(value) => setGlobalFilter(String(value))}
+            className='px-2 py-1 w-full sm:w-fit border-2 border-block rounded-lg'
+            placeholder='Cari'
+          />
+        </div>
       </div>
       <div className='p-2 w-full overflow-x-auto sm:overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-thumb-rounded-2xl'>
         <table className='w-[150%] sm:w-full text-gray-500'>
           <thead className='border-b-2 text-base'>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <th key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            {...{
+                              className: header.column.getCanSort()
+                                ? 'cursor-pointer select-none'
+                                : '',
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: ' 🔼',
+                              desc: ' 🔽',
+                            }[header.column.getIsSorted() as string] ?? null}
+                          </div>
+                        </>
+                      )}
+                    </th>
+                  );
+                })}
               </tr>
             ))}
           </thead>
@@ -280,4 +478,4 @@ const TableKompen = () => {
   );
 };
 
-export default TableKompen;
+export default TableMingguan;

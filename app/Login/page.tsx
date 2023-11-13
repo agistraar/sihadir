@@ -16,7 +16,7 @@ const Login = () => {
           />
         </div>
         <h1 className='text-white text-2xl max-w-2xl ml-20 hidden sm:block'>
-          <span className='font-bold'>Aplikasi</span> Absensi Mahasiswa Program
+          <span className='font-bold'>Aplikasi</span> Presensi Mahasiswa Program
           Studi Teknik Informatika yang Bisa Diakses Secara Online
         </h1>
         <div className='hidden sm:block w-5/6 h-5/6 relative '>

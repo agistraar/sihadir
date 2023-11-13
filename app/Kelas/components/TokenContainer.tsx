@@ -5,12 +5,15 @@ import { useSearchParams } from 'next/navigation';
 import React from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-const TokenContainer = () => {
-  const role = useSearchParams().get('role');
+type TokenContainerParams = {
+  role: number;
+};
+
+const TokenContainer = ({ role }: TokenContainerParams) => {
   return (
     <div className='relative w-full md:w-[40%] custom-gradient rounded-2xl '>
-      {role === 'dosen' || role == 'kaprodi' ? <DosenView /> : null}
-      {role === 'mahasiswa' && <MahasiswaView />}
+      {role === 1 || role == 2 ? <DosenView /> : null}
+      {role === 3 && <MahasiswaView />}
     </div>
   );
 };

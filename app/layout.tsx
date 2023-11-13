@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
+import AuthProvider from './context/AuthProvider';
 
 const inter = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -27,7 +28,7 @@ export default function RootLayout({
           'scrollbar-thin scrollbar-thumb-gray-500 scrollbar-thumb-rounded-2xl bg-gray-200 text-black'
         )}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
