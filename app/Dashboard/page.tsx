@@ -6,6 +6,8 @@ import Footer from '../CoreComponents/Footer';
 import { getServerSession } from 'next-auth';
 import { options } from '../api/auth/[...nextauth]/options';
 import { redirect } from 'next/navigation';
+import DashboardDosenMahasiswa from './DashboardDosenMahasiswa';
+import DashboardAdmin from './DashboardAdmin';
 
 const Dashboard = async () => {
   const session = await getServerSession(options);
@@ -29,10 +31,12 @@ const Dashboard = async () => {
                 </h1>
               </div>
             </div>
-            <div className='w-full flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 box-border'>
-              <TodayClass />
-              <KonfirmasiPresensi />
-            </div>
+            {session.user.role === 3 ||
+            session.user.role === 2 ||
+            session.user.role === 1 ? (
+              <DashboardDosenMahasiswa />
+            ) : null}
+            {session.user.role === 0 && <DashboardAdmin />}
           </div>
           <Footer />
         </div>

@@ -1,9 +1,14 @@
 import React from 'react';
-import ListKonfir from './ListKonfir';
 import Link from 'next/link';
+import ListKonfirDosen from './ListKonfirDosen';
+import { getServerSession } from 'next-auth';
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import ListKonfirMahasiswa from './ListKonfirMahasiswa';
 
-const KonfirmasiPresensi = () => {
-  const data = [
+const KonfirmasiPresensi = async () => {
+  const session = await getServerSession(options);
+
+  const dataDosen = [
     {
       tipe: 'Izin',
       nama: 'Muhammad Fajar',
@@ -32,43 +37,55 @@ const KonfirmasiPresensi = () => {
       semester: '5',
       kelas: 'C',
     },
-    // {
-    //   tipe: 'Izin',
-    //   nama: 'Muhammad Resky Maulana',
-    //   nim: '3202116135',
-    //   semester: '5',
-    //   kelas: 'B',
-    // },
-    // {
-    //   tipe: 'Izin',
-    //   nama: 'Falah Bintang',
-    //   nim: '3202116003',
-    //   semester: '5',
-    //   kelas: 'A',
-    // },
-    // {
-    //   tipe: 'Sakit',
-    //   nama: 'Muhammad Hayyunaji',
-    //   nim: '3202116096',
-    //   semester: '5',
-    //   kelas: 'B',
-    // },
+  ];
+
+  const dataMahasiswa = [
+    {
+      matkul: 'Pemrograman Web',
+      tanggal: '13/11/2023',
+      jam: '6',
+    },
+    {
+      matkul: 'Rekayasa Perangkat Lunak',
+      tanggal: '13/11/2023',
+      jam: '6',
+    },
+    {
+      matkul: 'Jaringan Lanjutan',
+      tanggal: '12/11/2023',
+      jam: '5',
+    },
+    {
+      matkul: 'Etika Profesi',
+      tanggal: '11/11/2023',
+      jam: '4',
+    },
   ];
   return (
     <div className='w-full md:w-3/5 bg-white px-4 pb-10 pt-4 rounded-2xl space-y-4 relative'>
       <h2 className='text-lg font-semibold'>
         Konfirmasi Kehadiran Mahasiswa Anda
       </h2>
-      {data.map((val, index) => (
-        <ListKonfir
-          key={index}
-          tipe={val.tipe}
-          nama={val.nama}
-          nim={val.nim}
-          semester={val.semester}
-          kelas={val.kelas}
-        />
-      ))}
+      {session?.user.role === 2 &&
+        dataDosen.map((val, index) => (
+          <ListKonfirDosen
+            key={index}
+            tipe={val.tipe}
+            nama={val.nama}
+            nim={val.nim}
+            semester={val.semester}
+            kelas={val.kelas}
+          />
+        ))}
+      {session?.user.role === 3 &&
+        dataMahasiswa.map((val, index) => (
+          <ListKonfirMahasiswa
+            key={index}
+            matkul={val.matkul}
+            tanggal={val.tanggal}
+            jam={val.jam}
+          />
+        ))}
       <Link
         href={{ pathname: 'Mahasiswa' }}
         className='text-xs font-medium text-blue-500 underline absolute bottom-2 right-2'

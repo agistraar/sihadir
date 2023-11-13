@@ -10,7 +10,13 @@ type ListKonfirParams = {
   kelas: string;
 };
 
-const ListKonfir = ({ tipe, nama, nim, semester, kelas }: ListKonfirParams) => {
+const ListKonfirDosen = ({
+  tipe,
+  nama,
+  nim,
+  semester,
+  kelas,
+}: ListKonfirParams) => {
   return (
     <div className='bg-gray-300 rounded-xl flex text-base font-medium relative'>
       <div
@@ -35,4 +41,4 @@ const ListKonfir = ({ tipe, nama, nim, semester, kelas }: ListKonfirParams) => {
   );
 };
 
-export default ListKonfir;
+export default ListKonfirDosen;

@@ -87,10 +87,6 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-type colData = {
-  val: CellContext<DataKompen, unknown>;
-};
-
 const TableSemester = () => {
   const rerender = React.useReducer(() => ({}), {})[1];
 
@@ -128,6 +124,11 @@ const TableSemester = () => {
         enableColumnFilter: false,
         filterFn: 'fuzzy',
         sortingFn: fuzzySort,
+      },
+      {
+        accessorKey: 'hadir',
+        header: () => 'Hadir',
+        cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'alpa',

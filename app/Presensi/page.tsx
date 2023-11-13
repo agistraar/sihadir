@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import { options } from '../api/auth/[...nextauth]/options';
 import { notFound, redirect } from 'next/navigation';
 import MahasiswaTable from './components/MahasiswaTable';
+import DosenTable from './components/DosenTable';
 
 const Presensi = async () => {
   const session = await getServerSession(options);
@@ -22,6 +23,7 @@ const Presensi = async () => {
       <div className='w-full flex flex-row-reverse'>
         <div className='w-full calculated-width'>
           {session.user.role === 3 && <MahasiswaTable />}
+          {session.user.role === 2 && <DosenTable />}
           <Footer />
         </div>
       </div>

@@ -8,6 +8,7 @@ interface InputSelectProps {
   label?: string;
   register: UseFormRegister<FieldValues>;
   options: { value: string; label: string }[];
+  handleChange?: (e: any) => void;
 }
 
 const InputSelect: React.FC<InputSelectProps> = ({
@@ -16,6 +17,7 @@ const InputSelect: React.FC<InputSelectProps> = ({
   label,
   formId,
   options,
+  handleChange,
 }) => {
   return (
     <div className='space-y-1'>
@@ -27,6 +29,7 @@ const InputSelect: React.FC<InputSelectProps> = ({
         form={formId}
         autoComplete={id}
         {...register(id)}
+        onChange={handleChange}
         className=' border border-gray-300 text-black text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2'
       >
         {options.map((res) => (

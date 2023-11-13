@@ -1,11 +1,18 @@
 'use client';
 import { memo } from 'react';
 import { CellContext } from '@tanstack/react-table';
-import { DataPresensiMingguan } from '@/app/utils/fakeData';
+import {
+  DataDosenMingguan,
+  DataDosenSemester,
+  DataPresensiMingguan,
+} from '@/app/utils/fakeData';
 import clsx from 'clsx';
 
 type colData = {
-  val: CellContext<DataPresensiMingguan, unknown>;
+  val:
+    | CellContext<DataPresensiMingguan, unknown>
+    | CellContext<DataDosenMingguan, unknown>
+    | CellContext<DataDosenSemester, unknown>;
 };
 
 type statusData = {
@@ -28,6 +35,12 @@ export const CachedNama = memo(function CachedNama({ val }: colData) {
       </div>
     </div>
   );
+});
+
+export const CachedTotalMengajar = memo(function CachedTotalMengajar({
+  val,
+}: colData) {
+  return <p className='text-center mx-2'>{String(val.getValue()) + ' Jam'}</p>;
 });
 
 export const CachedStatus = memo(function CachedStatus({ val }: statusData) {

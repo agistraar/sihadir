@@ -130,6 +130,11 @@ const TableMingguan = () => {
         sortingFn: fuzzySort,
       },
       {
+        accessorKey: 'hadir',
+        header: () => 'Hadir',
+        cell: (info) => <CachedNum val={info} />,
+      },
+      {
         accessorKey: 'alpa',
         header: () => 'Alpa',
         cell: (info) => <CachedNum val={info} />,
