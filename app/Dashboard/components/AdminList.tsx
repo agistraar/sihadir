@@ -14,7 +14,7 @@ type StatusParams = {
 const AdminList = () => {
   const dataKompen = makeKompenAdmin(12);
   return (
-    <div className='w-full h-fit md:w-2/5 bg-white px-2 py-4 rounded-2xl relative pb-12'>
+    <div className='w-full h-fit md:w-2/5 bg-white px-2 py-4 rounded-2xl relative pb-12 mb-4 md:mb-0'>
       <h1 className='text-xl font-bold px-2 mb-4'>
         Perkembangan Data Kompensasi
       </h1>

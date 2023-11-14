@@ -139,13 +139,13 @@ const ChartAbsensi = () => {
   });
 
   return (
-    <div className='w-full bg-white rounded-2xl px-2 py-4'>
+    <div className='w-full md:h-fit bg-white rounded-2xl px-2 py-4'>
       <h1 className='font-semibold pl-2 text-lg'>
-        Grafik <span className='text-red-400'>Ketidakhadiran</span> Mahasiswa TI
+        Grafik <span className='text-red-400'>Absensi</span> Mahasiswa TI
       </h1>
       <form
         id='sortFormGraphAbsensi'
-        className='w-full flex items-center pl-2 space-x-2'
+        className='w-full flex items-center pl-2 space-x-2 mb-4'
       >
         <InputSelect
           id='semesterAbsensi'
@@ -160,7 +160,7 @@ const ChartAbsensi = () => {
           options={kelasOption}
         />
       </form>
-      <Line className='w-full h-80' options={options} data={data} />
+      <Line className='w-full' options={options} data={data} />
     </div>
   );
 };

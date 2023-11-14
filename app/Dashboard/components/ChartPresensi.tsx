@@ -127,13 +127,13 @@ const ChartPresensi = () => {
   });
 
   return (
-    <div className='w-full bg-white rounded-2xl px-2 py-4'>
+    <div className='w-full h-fit bg-white rounded-2xl px-2 py-4'>
       <h1 className='font-semibold pl-2 text-lg'>
-        Grafik <span className='text-blue-400'>Kehadiran</span> Mahasiswa TI
+        Grafik <span className='text-blue-400'>Presensi</span> Mahasiswa TI
       </h1>
       <form
         id='sortFormGraphPresensi'
-        className='w-full flex items-center pl-2'
+        className='w-full flex items-center pl-2 mb-4'
       >
         <InputSelect
           id='semesterPresensi'
@@ -142,7 +142,7 @@ const ChartPresensi = () => {
           options={semesterOption}
         />
       </form>
-      <Line className='w-full h-80' options={options} data={data} />
+      <Line className='w-full' options={options} data={data} />
     </div>
   );
 };
