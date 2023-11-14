@@ -51,6 +51,11 @@ export type DataDosenSemester = {
   total: number;
 };
 
+export type DataKompenAdmin = {
+  nama: string;
+  jam: number;
+};
+
 const range = (len: number) => {
   const arr = [];
   for (let i = 0; i < len; i++) {
@@ -136,6 +141,13 @@ const newDosenSemester = (): DataDosenSemester => {
   };
 };
 
+const newKompenAdmin = (): DataKompenAdmin => {
+  return {
+    nama: faker.person.fullName(),
+    jam: faker.number.int({ min: 4, max: 80 }),
+  };
+};
+
 export function makeData(...lens: number[]) {
   const makeDataLevel = (depth = 0): DataKelas[] => {
     const len = lens[depth]!;
@@ -202,6 +214,18 @@ export function makeDosenSemester(...lens: number[]) {
     return range(len).map((d): DataDosenSemester => {
       return {
         ...newDosenSemester(),
+      };
+    });
+  };
+  return makeDataLevel();
+}
+
+export function makeKompenAdmin(...lens: number[]) {
+  const makeDataLevel = (depth = 0): DataKompenAdmin[] => {
+    const len = lens[depth]!;
+    return range(len).map((d): DataKompenAdmin => {
+      return {
+        ...newKompenAdmin(),
       };
     });
   };
