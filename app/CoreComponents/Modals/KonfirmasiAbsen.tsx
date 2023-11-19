@@ -1,8 +1,9 @@
-'use client';
 import clsx from 'clsx';
 import React from 'react';
 import Image from 'next/image';
 import Button from '../Button';
+import { Image as IconImage, X } from 'react-feather';
+import Link from 'next/link';
 
 type KonfirmasiAbsenParams = {
   isVisible: boolean;
@@ -17,6 +18,7 @@ const KonfirmasiAbsen = ({
   name,
   setIsVisible,
 }: KonfirmasiAbsenParams) => {
+  const surat = '/img/sample-surat.png';
   return (
     <div
       className={clsx(
@@ -24,18 +26,31 @@ const KonfirmasiAbsen = ({
         'absolute left-0 top-0 z-50 h-screen w-screen bg-black bg-opacity-50 flex items-center justify-center p-5 md:py-10 md:px-20'
       )}
     >
-      <div className='w-full h-full bg-white rounded-2xl flex flex-col items-center md:items-start md:flex-row px-6 py-3'>
-        <div className='w-2/3 h-1/2 md:h-full md:w-2/5 bg-gray-400 rounded-2xl p-2 md:p-4 '>
-          <div className='h-full w-full relative'>
-            <Image
-              priority
-              alt='Surat'
-              fill
-              sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-              src='/img/sample-surat.png'
-              className='w-full h-auto'
-            />
-          </div>
+      <div className='w-full h-full bg-white rounded-2xl flex flex-col items-center md:items-start md:flex-row px-6 py-3 relative'>
+        <X
+          className='absolute top-3 right-3 cursor-pointer'
+          onClick={() => setIsVisible(!isVisible)}
+        />
+        <div className='w-full h-fit md:h-full md:w-2/5 custom-gradient  rounded-2xl p-2 md:p-4 mt-8 md:mt-0 '>
+          <Link
+            href={`/_next/image?url=${surat.replace('/', '%2F')}&w=1080&q=100`}
+            target='_blank'
+          >
+            <div className='h-full w-full relative hidden md:block'>
+              <Image
+                priority
+                alt='Surat'
+                fill
+                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                src={surat}
+                className='w-full h-auto'
+              />
+            </div>
+            <div className='w-full flex items-center space-x-3 px-4 py-2 md:hidden text-white font-medium'>
+              <IconImage />
+              <p>Tekan untuk lihat surat</p>
+            </div>
+          </Link>
         </div>
         <div className='w-full h-2/3 md:w-3/5 md:h-full  p-2 md:p-4 flex flex-col'>
           <h1 className='font-bold text-center text-2xl'>
@@ -81,12 +96,12 @@ const KonfirmasiAbsen = ({
               </div>
             </div>
           </div>
-          <div className='w-full flex justify-end space-x-2 mt-6'>
-            <Button red onClick={() => setIsVisible(false)}>
-              Tolak
-            </Button>
-            <Button onClick={() => setIsVisible(false)}>Konfirmasi</Button>
-          </div>
+        </div>
+        <div className='w-full flex justify-end space-x-2 absolute bottom-3 right-3'>
+          <Button red onClick={() => setIsVisible(false)}>
+            Tolak
+          </Button>
+          <Button onClick={() => setIsVisible(false)}>Konfirmasi</Button>
         </div>
       </div>
     </div>

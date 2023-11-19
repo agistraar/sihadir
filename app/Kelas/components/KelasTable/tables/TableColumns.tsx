@@ -16,6 +16,10 @@ type konfirParams = {
   setData: Function;
 };
 
+type editParams = {
+  onClick: () => void;
+};
+
 export const CachedNim = memo(function CachedNim({ val }: colData) {
   return (
     <div className='w-full flex justify-center px-2'>
@@ -66,10 +70,12 @@ export const CachedStatus = memo(function CachedStatus({ val }: colData) {
   );
 });
 
-export const CachedDetail = memo(function CachedDetail() {
+export const CachedDetail = memo(function CachedDetail({
+  onClick,
+}: editParams) {
   return (
     <div className='w-full flex justify-center px-2'>
-      <Button>Edit</Button>
+      <Button onClick={onClick}>Edit</Button>
     </div>
   );
 });

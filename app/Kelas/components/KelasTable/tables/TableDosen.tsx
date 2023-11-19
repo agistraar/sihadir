@@ -28,6 +28,7 @@ import {
   CachedStatus,
 } from './TableColumns';
 import KonfirmasiAbsen from '@/app/CoreComponents/Modals/KonfirmasiAbsen';
+import EditPresensi from '@/app/CoreComponents/Modals/EditPresensi';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -76,6 +77,7 @@ const TableDosen = () => {
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalData, setModalData] = React.useState({ nim: '', nama: '' });
+  const [editVisible, setEditVisible] = React.useState(false);
 
   const columns = React.useMemo<ColumnDef<DataKelas>[]>(
     () => [
@@ -120,7 +122,9 @@ const TableDosen = () => {
       {
         accessorKey: 'detail',
         header: () => 'Detail',
-        cell: () => <CachedDetail />,
+        cell: () => (
+          <CachedDetail onClick={() => setEditVisible(!editVisible)} />
+        ),
       },
       {
         accessorKey: 'konfirmasi',
@@ -140,7 +144,7 @@ const TableDosen = () => {
         },
       },
     ],
-    []
+    [editVisible]
   );
 
   const [data, setData] = React.useState<DataKelas[]>([]);
@@ -197,6 +201,7 @@ const TableDosen = () => {
         />
       </div>
       <div className='p-2 w-full overflow-x-auto sm:overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-thumb-rounded-2xl'>
+        <EditPresensi isVisible={editVisible} setIsVisible={setEditVisible} />
         <table className='w-[150%] sm:w-full text-gray-500'>
           <thead className='border-b-2 text-base'>
             {table.getHeaderGroups().map((headerGroup) => (
