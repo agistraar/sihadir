@@ -5,6 +5,7 @@ declare module 'next-auth' {
     user: {
       id: string;
       name: string;
+      nomor_induk: string;
       role: number;
     };
     accessToken: string;
@@ -12,6 +13,7 @@ declare module 'next-auth' {
   interface User {
     id: string;
     name: string;
+    nomor_induk: string;
     role: number;
   }
   // interface JWT {

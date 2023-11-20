@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Button from '../Button';
 import { Image as IconImage, X } from 'react-feather';
 import Link from 'next/link';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 type KonfirmasiAbsenParams = {
   isVisible: boolean;
@@ -19,6 +21,57 @@ const KonfirmasiAbsen = ({
   setIsVisible,
 }: KonfirmasiAbsenParams) => {
   const surat = '/img/sample-surat.png';
+
+  const showAlertKonfirmasi = () => {
+    withReactContent(Swal)
+      .fire({
+        title: <p>Konfirmasi Absensi Mahasiswa Ini?</p>,
+        icon: 'question',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Konfirmasi',
+        cancelButtonText: `Batal`,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Konfirmasi Diterima',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000,
+            willClose: () => {
+              setIsVisible(!isVisible);
+            },
+          });
+        }
+      });
+  };
+
+  const showAlertTolak = () => {
+    withReactContent(Swal)
+      .fire({
+        title: <p>Tolak Konfirmasi Mahasiswa Ini?</p>,
+        icon: 'warning',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Tolak',
+        cancelButtonText: `Batal`,
+        confirmButtonColor: '#ff0000',
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Konfirmasi Ditolak',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000,
+            willClose: () => {
+              setIsVisible(!isVisible);
+            },
+          });
+        }
+      });
+  };
   return (
     <div
       className={clsx(
@@ -98,10 +151,10 @@ const KonfirmasiAbsen = ({
           </div>
         </div>
         <div className='w-full flex justify-end space-x-2 absolute bottom-3 right-3'>
-          <Button red onClick={() => setIsVisible(false)}>
+          <Button red onClick={showAlertTolak}>
             Tolak
           </Button>
-          <Button onClick={() => setIsVisible(false)}>Konfirmasi</Button>
+          <Button onClick={showAlertKonfirmasi}>Konfirmasi</Button>
         </div>
       </div>
     </div>

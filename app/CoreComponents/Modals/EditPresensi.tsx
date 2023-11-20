@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { X } from 'react-feather';
 import Button from '../Button';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 type EditPresensiParams = {
   isVisible: boolean;
@@ -10,6 +12,33 @@ type EditPresensiParams = {
 };
 
 const EditPresensi = ({ isVisible, setIsVisible }: EditPresensiParams) => {
+  const showAlert = () => {
+    withReactContent(Swal)
+      .fire({
+        title: <p>Ubah Data Presensi Mahasiswa Ini?</p>,
+        icon: 'question',
+        showConfirmButton: true,
+        showDenyButton: true,
+        confirmButtonText: 'Simpan',
+        denyButtonText: `Periksa Kembali`,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Berhasil Disimpan',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000,
+            willClose: () => {
+              document.forms['0'].reset();
+              document.forms['1'].reset();
+              document.forms['2'].reset();
+              setIsVisible(!isVisible);
+            },
+          });
+        }
+      });
+  };
   return (
     <div
       className={clsx(
@@ -60,7 +89,7 @@ const EditPresensi = ({ isVisible, setIsVisible }: EditPresensiParams) => {
           </form>
         </div>
         <div className='w-full flex flex-col px-2 space-y-2'>
-          <p>Status</p>
+          <p>Jumlah Jam Yang Ditinggal</p>
           <form id='jamEditPresensi' className='px-1 space-y-2 flex-col'>
             <select
               name='jam'
@@ -79,7 +108,7 @@ const EditPresensi = ({ isVisible, setIsVisible }: EditPresensiParams) => {
           </form>
         </div>
         <div className='w-full absolute flex justify-end bottom-3 right-3'>
-          <Button onClick={() => setIsVisible(false)}>Simpan</Button>
+          <Button onClick={showAlert}>Simpan</Button>
         </div>
       </div>
     </div>
