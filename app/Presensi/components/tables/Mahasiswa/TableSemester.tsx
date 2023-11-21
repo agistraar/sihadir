@@ -132,11 +132,6 @@ const TableSemester = () => {
         header: () => 'Sakit',
         cell: (info) => <CachedNum val={info} />,
       },
-      {
-        accessorKey: 'status',
-        header: () => 'Status',
-        cell: (info) => <CachedStatus val={Number(info.getValue())} />,
-      },
     ],
     []
   );

@@ -23,7 +23,9 @@ const Presensi = async () => {
       <div className='w-full flex flex-row-reverse'>
         <div className='w-full calculated-width'>
           {session.user.role === 3 && <MahasiswaTable />}
-          {session.user.role === 2 && <DosenTable />}
+          {session.user.role === 2 || session?.user.role === 1 ? (
+            <DosenTable />
+          ) : null}
           <Footer />
         </div>
       </div>

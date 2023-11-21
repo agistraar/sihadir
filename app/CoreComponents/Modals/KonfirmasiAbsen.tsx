@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import Image from 'next/image';
 import Button from '../Button';
-import { Image as IconImage, X } from 'react-feather';
+import { FileText, Image as IconImage, X } from 'react-feather';
 import Link from 'next/link';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -85,25 +85,38 @@ const KonfirmasiAbsen = ({
           onClick={() => setIsVisible(!isVisible)}
         />
         <div className='w-full h-fit md:h-full md:w-2/5 custom-gradient  rounded-2xl p-2 md:p-4 mt-8 md:mt-0 '>
-          <Link
-            href={`/_next/image?url=${surat.replace('/', '%2F')}&w=1080&q=100`}
-            target='_blank'
-          >
-            <div className='h-full w-full relative hidden md:block'>
-              <Image
-                priority
-                alt='Surat'
-                fill
-                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                src={surat}
-                className='w-full h-auto'
-              />
-            </div>
-            <div className='w-full flex items-center space-x-3 px-4 py-2 md:hidden text-white font-medium'>
-              <IconImage />
-              <p>Tekan untuk lihat surat</p>
-            </div>
-          </Link>
+          {surat.substring(surat.lastIndexOf('.')) === '.pdf' ? (
+            <Link href={surat} target='_blank'>
+              <FileText className='h-[90%] w-full' />
+              <p className='text-center'>
+                PDF tidak dapat ditampilkan, silahkan download dengan cara klik
+                section ini
+              </p>
+            </Link>
+          ) : (
+            <Link
+              href={`/_next/image?url=${surat.replace(
+                '/',
+                '%2F'
+              )}&w=1080&q=100`}
+              target='_blank'
+            >
+              <div className='h-full w-full relative hidden md:block'>
+                <Image
+                  priority
+                  alt='Surat'
+                  fill
+                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                  src={surat}
+                  className='w-full h-auto'
+                />
+              </div>
+              <div className='w-full flex items-center space-x-3 px-4 py-2 md:hidden text-white font-medium'>
+                <IconImage />
+                <p>Tekan untuk lihat surat</p>
+              </div>
+            </Link>
+          )}
         </div>
         <div className='w-full h-2/3 md:w-3/5 md:h-full  p-2 md:p-4 flex flex-col'>
           <h1 className='font-bold text-center text-2xl'>

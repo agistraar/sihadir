@@ -29,8 +29,10 @@ import {
 import {
   DataKompen,
   DataMingguan,
+  DataPresensiDosenSemester,
   makeKompen,
   makeMingguan,
+  makePresensiDosenSemester,
 } from '@/app/utils/fakeData';
 import DebouncedInput from '@/app/CoreComponents/DebouncedInput';
 import {
@@ -41,13 +43,7 @@ import {
   Search,
 } from 'react-feather';
 import Button from '@/app/CoreComponents/Button';
-import {
-  CachedJum,
-  CachedNama,
-  CachedNim,
-  CachedNum,
-  CachedStatus,
-} from './Columns';
+import { CachedJum, CachedNama, CachedNim, CachedNum } from './Columns';
 import InputSelect from '@/app/CoreComponents/InputSelect';
 import { FieldValues, useForm } from 'react-hook-form';
 declare module '@tanstack/table-core' {
@@ -100,7 +96,7 @@ const TableSemester = () => {
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const columns = React.useMemo<ColumnDef<DataKompen>[]>(
+  const columns = React.useMemo<ColumnDef<DataPresensiDosenSemester>[]>(
     () => [
       {
         accessorKey: 'No',
@@ -112,6 +108,11 @@ const TableSemester = () => {
         ),
       },
       {
+        accessorKey: 'tanggal',
+        header: () => 'Tanggal',
+        cell: (info) => <CachedNim val={info} />,
+      },
+      {
         accessorKey: 'nama',
         header: () => 'Nama',
         cell: (info) => <CachedNama val={info} />,
@@ -121,43 +122,24 @@ const TableSemester = () => {
         sortingFn: fuzzySort,
       },
       {
-        accessorKey: 'nim',
-        header: () => 'NIM',
-        cell: (info) => <CachedNim val={info} />,
-        enableSorting: false,
-        enableColumnFilter: false,
-        filterFn: 'fuzzy',
-        sortingFn: fuzzySort,
-      },
-      {
-        accessorKey: 'alpa',
-        header: () => 'Alpa',
-        cell: (info) => <CachedNum val={info} />,
-      },
-      {
-        accessorKey: 'izin',
-        header: () => 'Izin',
-        cell: (info) => <CachedNum val={info} />,
-      },
-      {
-        accessorKey: 'sakit',
-        header: () => 'Sakit',
+        accessorKey: 'semester',
+        header: () => 'Semester',
         cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'total',
-        header: () => 'Total',
-        cell: (info) => <CachedJum val={info} />,
+        header: () => 'Total Mengajar',
+        cell: (info) => <CachedNum val={info} />,
       },
     ],
     []
   );
 
-  const [data, setData] = React.useState<DataMingguan[]>([]);
-  const refreshData = () => setData((old) => makeMingguan(50000));
+  const [data, setData] = React.useState<DataPresensiDosenSemester[]>([]);
+  const refreshData = () => setData((old) => makePresensiDosenSemester(50));
 
   React.useEffect(() => {
-    setData(() => makeMingguan(50000));
+    setData(() => makePresensiDosenSemester(50));
   }, []);
 
   const table = useReactTable({
@@ -219,28 +201,6 @@ const TableSemester = () => {
       value: '6',
     },
   ];
-  const kelasOption = [
-    {
-      label: 'A',
-      value: 'A',
-    },
-    {
-      label: 'B',
-      value: 'B',
-    },
-    {
-      label: 'C',
-      value: 'C',
-    },
-    {
-      label: 'D',
-      value: 'D',
-    },
-    {
-      label: 'E',
-      value: 'E',
-    },
-  ];
 
   const {
     register,
@@ -248,7 +208,6 @@ const TableSemester = () => {
   } = useForm<FieldValues>({
     defaultValues: {
       semester: semesterOption[0].value,
-      kelas: kelasOption[0].value,
     },
   });
 
@@ -264,13 +223,6 @@ const TableSemester = () => {
           register={register}
           label='Semester'
           options={semesterOption}
-        />
-        <InputSelect
-          id='kelas'
-          formId='sortFormMingguan'
-          register={register}
-          label='Kelas'
-          options={kelasOption}
         />
       </form>
       <div className='w-full flex items-center justify-between my-2 '>

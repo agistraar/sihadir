@@ -29,8 +29,10 @@ import {
 import {
   DataKompen,
   DataMingguan,
+  DataPresensiDosenMingguan,
   makeKompen,
   makeMingguan,
+  makePresensiDosenMingguan,
 } from '@/app/utils/fakeData';
 import DebouncedInput from '@/app/CoreComponents/DebouncedInput';
 import {
@@ -41,13 +43,7 @@ import {
   Search,
 } from 'react-feather';
 import Button from '@/app/CoreComponents/Button';
-import {
-  CachedJum,
-  CachedNama,
-  CachedNim,
-  CachedNum,
-  CachedStatus,
-} from './Columns';
+import { CachedJum, CachedNama, CachedNim, CachedNum } from './Columns';
 import InputSelect from '@/app/CoreComponents/InputSelect';
 import { FieldValues, useForm } from 'react-hook-form';
 declare module '@tanstack/table-core' {
@@ -87,10 +83,6 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-type colData = {
-  val: CellContext<DataKompen, unknown>;
-};
-
 const TableMingguan = () => {
   const rerender = React.useReducer(() => ({}), {})[1];
 
@@ -100,7 +92,7 @@ const TableMingguan = () => {
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const columns = React.useMemo<ColumnDef<DataKompen>[]>(
+  const columns = React.useMemo<ColumnDef<DataPresensiDosenMingguan>[]>(
     () => [
       {
         accessorKey: 'No',
@@ -112,6 +104,11 @@ const TableMingguan = () => {
         ),
       },
       {
+        accessorKey: 'tanggal',
+        header: () => 'Tanggal',
+        cell: (info) => <CachedNim val={info} />,
+      },
+      {
         accessorKey: 'nama',
         header: () => 'Nama',
         cell: (info) => <CachedNama val={info} />,
@@ -120,44 +117,36 @@ const TableMingguan = () => {
         filterFn: 'fuzzy',
         sortingFn: fuzzySort,
       },
+
       {
-        accessorKey: 'nim',
-        header: () => 'NIM',
-        cell: (info) => <CachedNim val={info} />,
-        enableSorting: false,
-        enableColumnFilter: false,
-        filterFn: 'fuzzy',
-        sortingFn: fuzzySort,
+        accessorKey: 'matkul',
+        header: () => 'Matkul',
+        cell: (info) => <CachedNama val={info} />,
       },
       {
-        accessorKey: 'alpa',
-        header: () => 'Alpa',
+        accessorKey: 'kelas',
+        header: () => 'Kelas',
         cell: (info) => <CachedNum val={info} />,
       },
       {
-        accessorKey: 'izin',
-        header: () => 'Izin',
-        cell: (info) => <CachedNum val={info} />,
-      },
-      {
-        accessorKey: 'sakit',
-        header: () => 'Sakit',
+        accessorKey: 'ruang',
+        header: () => 'Ruang',
         cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'total',
-        header: () => 'Total',
+        header: () => 'Total Mengajar',
         cell: (info) => <CachedJum val={info} />,
       },
     ],
     []
   );
 
-  const [data, setData] = React.useState<DataMingguan[]>([]);
-  const refreshData = () => setData((old) => makeMingguan(50000));
+  const [data, setData] = React.useState<DataPresensiDosenMingguan[]>([]);
+  const refreshData = () => setData((old) => makePresensiDosenMingguan(24));
 
   React.useEffect(() => {
-    setData(() => makeMingguan(50000));
+    setData(() => makePresensiDosenMingguan(24));
   }, []);
 
   const table = useReactTable({
@@ -259,52 +248,60 @@ const TableMingguan = () => {
       value: '16',
     },
   ];
-  const semesterOption = [
+  const matkulOption = [
     {
-      label: 'Senin',
-      value: '1',
+      label: 'All',
+      value: '',
     },
     {
-      label: 'Selasa',
-      value: '2',
+      label: 'Pemrograman Web',
+      value: 'Pemrograman Web',
     },
     {
-      label: 'Rabu',
-      value: '3',
+      label: 'Project Based Learning',
+      value: 'Project Based Learning',
     },
     {
-      label: 'Kamis',
-      value: '4',
+      label: 'Rekayasa Perangkat Lunak',
+      value: 'Rekayasa Perangkat Lunak',
     },
     {
-      label: 'Jumat',
-      value: '5',
+      label: 'Jaringan Komputer Lanjutan',
+      value: 'Jaringan Komputer Lanjutan',
     },
     {
-      label: 'Sabtu',
-      value: '6',
+      label: 'Etika Profesi',
+      value: 'Etika Profesi',
+    },
+    {
+      label: 'Kewirausahaan',
+      value: 'Kewirausahaan',
     },
   ];
   const kelasOption = [
     {
-      label: 'A',
-      value: 'A',
+      label: 'All',
+      value: '',
     },
     {
-      label: 'B',
-      value: 'B',
+      label: '5A',
+      value: '5A',
     },
     {
-      label: 'C',
-      value: 'C',
+      label: '5B',
+      value: '5B',
     },
     {
-      label: 'D',
-      value: 'D',
+      label: '5C',
+      value: '5C',
     },
     {
-      label: 'E',
-      value: 'E',
+      label: '5D',
+      value: '5D',
+    },
+    {
+      label: '5E',
+      value: '5E',
     },
   ];
 
@@ -314,7 +311,7 @@ const TableMingguan = () => {
   } = useForm<FieldValues>({
     defaultValues: {
       minggu: mingguOption[0].value,
-      semester: semesterOption[0].value,
+      matkul: matkulOption[0].value,
       kelas: kelasOption[0].value,
     },
   });
@@ -333,11 +330,17 @@ const TableMingguan = () => {
           options={mingguOption}
         />
         <InputSelect
-          id='semesterTableMingguan'
+          id='matkulTableMingguan'
           formId='sortFormMingguan'
           register={register}
-          label='Semester'
-          options={semesterOption}
+          label='Mata Kuliah'
+          options={matkulOption}
+          handleChange={(e) =>
+            setColumnFilters([
+              ...columnFilters,
+              { id: 'matkul', value: e.target.value },
+            ])
+          }
         />
         <InputSelect
           id='kelasTableMingguan'
@@ -345,6 +348,12 @@ const TableMingguan = () => {
           register={register}
           label='Kelas'
           options={kelasOption}
+          handleChange={(e) =>
+            setColumnFilters([
+              ...columnFilters,
+              { id: 'kelas', value: e.target.value },
+            ])
+          }
         />
       </form>
       <div className='w-full flex items-center justify-between my-2 '>

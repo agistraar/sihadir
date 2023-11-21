@@ -1,11 +1,26 @@
 'use client';
 import { memo } from 'react';
 import { CellContext } from '@tanstack/react-table';
-import { DataKompen } from '@/app/utils/fakeData';
+import {
+  DataKompen,
+  DataKonfirmasiAbsen,
+  DataMingguan,
+} from '@/app/utils/fakeData';
 import clsx from 'clsx';
+import Button from '@/app/CoreComponents/Button';
 
 type colData = {
-  val: CellContext<DataKompen, unknown>;
+  val:
+    | CellContext<DataKompen, unknown>
+    | CellContext<DataMingguan, unknown>
+    | CellContext<DataKonfirmasiAbsen, unknown>;
+};
+
+type buttonParams = {
+  setIsVisible: Function;
+  setData: Function;
+  nim: string;
+  nama: string;
 };
 
 export const CachedNim = memo(function CachedNim({ val }: colData) {
@@ -25,6 +40,41 @@ export const CachedNama = memo(function CachedNama({ val }: colData) {
     <div className='w-full flex justify-end'>
       <div className='w-full md:w-[70%]'>
         <p className='text-left'>{String(val.getValue())}</p>
+      </div>
+    </div>
+  );
+});
+
+export const CachedButton = memo(function CachedButton({
+  setIsVisible,
+  setData,
+  nim,
+  nama,
+}: buttonParams) {
+  return (
+    <div className='w-full flex justify-center px-2'>
+      <Button
+        onClick={() => {
+          setIsVisible(true);
+          setData({ nim: nim, nama: nama });
+        }}
+      >
+        Detail
+      </Button>
+    </div>
+  );
+});
+
+export const CachedStatusKonf = memo(function CachedStatusKonf({ val }: any) {
+  return (
+    <div className='w-full flex justify-center px-2'>
+      <div
+        className={clsx(
+          'px-5 py-2 rounded-xl w-fit text-white text-xs text-center font-medium hover:-translate-y-[1px] duration-200 cursor-pointer',
+          String(val.getValue()) === 'Izin' ? 'bg-yellow-500' : 'bg-blue-500'
+        )}
+      >
+        {String(val.getValue())}
       </div>
     </div>
   );

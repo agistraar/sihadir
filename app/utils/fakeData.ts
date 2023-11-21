@@ -56,6 +56,30 @@ export type DataKompenAdmin = {
   jam: number;
 };
 
+export type DataKonfirmasiAbsen = {
+  nama: string;
+  nim: string;
+  kelas: string;
+  semester: number;
+  status: string;
+};
+
+export type DataPresensiDosenMingguan = {
+  tanggal: string;
+  nama: string;
+  matkul: string;
+  kelas: string;
+  ruang: string;
+  total: number;
+};
+
+export type DataPresensiDosenSemester = {
+  tanggal: string;
+  nama: string;
+  semester: string;
+  total: number;
+};
+
 const range = (len: number) => {
   const arr = [];
   for (let i = 0; i < len; i++) {
@@ -148,6 +172,51 @@ const newKompenAdmin = (): DataKompenAdmin => {
   };
 };
 
+const newKonfirmasiAbsensi = (): DataKonfirmasiAbsen => {
+  const dataKelas = ['A', 'B', 'C', 'D', 'E'];
+  const dataStatus = ['Sakit', 'Izin'];
+  return {
+    nama: faker.person.fullName(),
+    nim: '3202116030',
+    kelas: dataKelas[faker.number.int({ min: 0, max: 4 })],
+    semester: faker.number.int({ min: 1, max: 6 }),
+    status: dataStatus[faker.number.int({ min: 0, max: 1 })],
+  };
+};
+
+const newPresensiDosenMingguan = (): DataPresensiDosenMingguan => {
+  const dataMatkul = [
+    'Pemrograman Web',
+    'Project Based Learning',
+    'Rekayasa Perangkat Lunak',
+    'Jaringan Komputer Lanjutan',
+    'Etika Profesi',
+    'Kewirausahaan',
+  ];
+  const dataKelas = ['5A', '5B', '5C', '5D', '5E'];
+  return {
+    tanggal: new Date(
+      faker.date.between({ from: '2023-11-13', to: '2023-11-18' })
+    ).toLocaleDateString('id-ID'),
+    nama: faker.person.fullName(),
+    matkul: dataMatkul[faker.number.int({ min: 0, max: 5 })],
+    kelas: dataKelas[faker.number.int({ min: 0, max: 4 })],
+    ruang: 'TI-' + faker.number.int({ min: 1, max: 14 }),
+    total: faker.number.int({ min: 30, max: 50 }),
+  };
+};
+
+const newPresensiDosenSemester = (): DataPresensiDosenSemester => {
+  return {
+    tanggal: new Date(
+      faker.date.between({ from: '2023-11-13', to: '2023-11-18' })
+    ).toLocaleDateString('id-ID'),
+    nama: faker.person.fullName(),
+    semester: String(faker.number.int({ min: 1, max: 6 })),
+    total: faker.number.int({ min: 60, max: 120 }),
+  };
+};
+
 export function makeData(...lens: number[]) {
   const makeDataLevel = (depth = 0): DataKelas[] => {
     const len = lens[depth]!;
@@ -226,6 +295,42 @@ export function makeKompenAdmin(...lens: number[]) {
     return range(len).map((d): DataKompenAdmin => {
       return {
         ...newKompenAdmin(),
+      };
+    });
+  };
+  return makeDataLevel();
+}
+
+export function makeKonfirmasiAbsensi(...lens: number[]) {
+  const makeDataLevel = (depth = 0): DataKonfirmasiAbsen[] => {
+    const len = lens[depth]!;
+    return range(len).map((d): DataKonfirmasiAbsen => {
+      return {
+        ...newKonfirmasiAbsensi(),
+      };
+    });
+  };
+  return makeDataLevel();
+}
+
+export function makePresensiDosenMingguan(...lens: number[]) {
+  const makeDataLevel = (depth = 0): DataPresensiDosenMingguan[] => {
+    const len = lens[depth]!;
+    return range(len).map((d): DataPresensiDosenMingguan => {
+      return {
+        ...newPresensiDosenMingguan(),
+      };
+    });
+  };
+  return makeDataLevel();
+}
+
+export function makePresensiDosenSemester(...lens: number[]) {
+  const makeDataLevel = (depth = 0): DataPresensiDosenSemester[] => {
+    const len = lens[depth]!;
+    return range(len).map((d): DataPresensiDosenSemester => {
+      return {
+        ...newPresensiDosenSemester(),
       };
     });
   };

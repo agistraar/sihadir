@@ -109,7 +109,7 @@ const TableSemester = () => {
       {
         accessorKey: 'kelas',
         header: () => 'Kelas',
-        cell: (info) => <CachedNama val={info} />,
+        cell: (info) => <CachedNum val={info} />,
       },
       {
         accessorKey: 'semester',

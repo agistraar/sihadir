@@ -27,29 +27,22 @@ import {
   rankItem,
 } from '@tanstack/match-sorter-utils';
 import {
-  DataKompen,
-  DataMingguan,
-  makeKompen,
-  makeMingguan,
+  DataKonfirmasiAbsen,
+  makeKonfirmasiAbsensi,
 } from '@/app/utils/fakeData';
 import DebouncedInput from '@/app/CoreComponents/DebouncedInput';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Search,
-} from 'react-feather';
+import { Search } from 'react-feather';
 import Button from '@/app/CoreComponents/Button';
 import {
-  CachedJum,
+  CachedButton,
   CachedNama,
   CachedNim,
   CachedNum,
-  CachedStatus,
+  CachedStatusKonf,
 } from './Columns';
 import InputSelect from '@/app/CoreComponents/InputSelect';
 import { FieldValues, useForm } from 'react-hook-form';
+import KonfirmasiAbsen from '@/app/CoreComponents/Modals/KonfirmasiAbsen';
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -87,8 +80,11 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-const TableSemester = () => {
+const TableKonfirmasi = () => {
   const rerender = React.useReducer(() => ({}), {})[1];
+
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [modalData, setModalData] = React.useState({ nim: '', nama: '' });
 
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -96,7 +92,7 @@ const TableSemester = () => {
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const columns = React.useMemo<ColumnDef<DataMingguan>[]>(
+  const columns = React.useMemo<ColumnDef<DataKonfirmasiAbsen>[]>(
     () => [
       {
         accessorKey: 'No',
@@ -126,39 +122,41 @@ const TableSemester = () => {
         sortingFn: fuzzySort,
       },
       {
-        accessorKey: 'hadir',
-        header: () => 'Hadir',
+        accessorKey: 'kelas',
+        header: () => 'Kelas',
         cell: (info) => <CachedNum val={info} />,
       },
       {
-        accessorKey: 'alpa',
-        header: () => 'Alpa',
+        accessorKey: 'semester',
+        header: () => 'Semester',
         cell: (info) => <CachedNum val={info} />,
       },
       {
-        accessorKey: 'izin',
-        header: () => 'Izin',
-        cell: (info) => <CachedNum val={info} />,
+        accessorKey: 'status',
+        header: () => 'Status',
+        cell: (info) => <CachedStatusKonf val={info} />,
       },
       {
-        accessorKey: 'sakit',
-        header: () => 'Sakit',
-        cell: (info) => <CachedNum val={info} />,
-      },
-      {
-        accessorKey: 'total',
-        header: () => 'Total',
-        cell: (info) => <CachedJum val={info} />,
+        accessorKey: 'detail',
+        header: () => 'Detail',
+        cell: (info) => (
+          <CachedButton
+            setIsVisible={setModalVisible}
+            setData={setModalData}
+            nim={info.row.original.nim}
+            nama={info.row.original.nama}
+          />
+        ),
       },
     ],
     []
   );
 
-  const [data, setData] = React.useState<DataMingguan[]>([]);
-  const refreshData = () => setData((old) => makeMingguan(50000));
+  const [data, setData] = React.useState<DataKonfirmasiAbsen[]>([]);
+  const refreshData = () => setData((old) => makeKonfirmasiAbsensi(12));
 
   React.useEffect(() => {
-    setData(() => makeMingguan(50000));
+    setData(() => makeKonfirmasiAbsensi(12));
   }, []);
 
   const table = useReactTable({
@@ -255,6 +253,12 @@ const TableSemester = () => {
 
   return (
     <div>
+      <KonfirmasiAbsen
+        isVisible={modalVisible}
+        setIsVisible={setModalVisible}
+        name={modalData.nama}
+        nim={modalData.nim}
+      />
       <form
         id='sortFormSemester'
         className='w-full flex items-center justify-end space-x-2'
@@ -336,73 +340,8 @@ const TableSemester = () => {
           </tbody>
         </table>
       </div>
-      <div className='flex items-center gap-2 mt-2'>
-        <Button
-          type='submit'
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ChevronsLeft className='text-white h-4 w-4' />
-        </Button>
-        <Button
-          type='submit'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ChevronLeft className='text-white h-4 w-4' />
-        </Button>
-        <Button
-          type='submit'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronRight className='text-white h-4 w-4' />
-        </Button>
-        <Button
-          type='submit'
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronsRight className='text-white h-4 w-4' />
-        </Button>
-        <span className='flex items-center gap-1'>
-          <div>Halaman</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} dari{' '}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        {/* {dataQuery.isFetching ? 'Loading...' : null} */}
-      </div>
-      <div className='flex items-center gap-2 mt-2'>
-        <span className='flex items-center gap-1'>
-          Menuju ke halaman:
-          <input
-            type='number'
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className='border p-1 rounded w-16'
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-          className=' border border-gray-300 text-black text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block p-2'
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Tampilkan {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
     </div>
   );
 };
 
-export default TableSemester;
+export default TableKonfirmasi;

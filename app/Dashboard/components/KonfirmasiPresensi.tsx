@@ -11,7 +11,9 @@ const KonfirmasiPresensi = async () => {
   const pathKonfirmasi = session?.user.role === 3 ? 'Presensi' : 'Mahasiswa';
   return (
     <div className='w-full md:w-3/5 h-fit bg-white rounded-2xl'>
-      {session?.user.role === 2 && <ListKonfirDosen />}
+      {session?.user.role === 2 || session?.user.role === 1 ? (
+        <ListKonfirDosen />
+      ) : null}
       {session?.user.role === 3 && <ListKonfirMahasiswa />}
       <div className='w-full flex justify-end py-2 px-4'>
         <Link

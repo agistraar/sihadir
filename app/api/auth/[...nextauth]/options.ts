@@ -34,20 +34,17 @@ export const options: NextAuthOptions = {
           headers: { 'Content-Type': 'application/json' },
         });
 
-        if (res.status === 500) {
-          throw new Error(
-            'Server Error, silahkan coba dalam beberapa saat lagi'
-          );
+        const user = await res.json();
+        if (!res.ok) {
+          throw new Error(user.message);
+        }
+        // If no error and we have user data, return it
+        if (res.ok && user) {
+          return user;
         }
 
-        const parsedResponse = await res.json();
-
-        if (res.status === 401) {
-          throw new Error(parsedResponse.error);
-        }
-        if (res.status === 200) {
-          return parsedResponse;
-        }
+        // Return null if user data could not be retrieved
+        return null;
       },
     }),
   ],

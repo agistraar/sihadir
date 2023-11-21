@@ -18,22 +18,22 @@ const ListKonfirMahasiswa = () => {
   const data = [
     {
       matkul: 'Pemrograman Web',
-      tanggal: '13/11/2023',
+      tanggal: '2023-11-13',
       jam: '6',
     },
     {
       matkul: 'Rekayasa Perangkat Lunak',
-      tanggal: '13/11/2023',
+      tanggal: '2023-11-13',
       jam: '6',
     },
     {
       matkul: 'Jaringan Lanjutan',
-      tanggal: '12/11/2023',
+      tanggal: '2023-11-12',
       jam: '5',
     },
     {
       matkul: 'Etika Profesi',
-      tanggal: '11/11/2023',
+      tanggal: '2023-11-11',
       jam: '4',
     },
   ];
@@ -68,13 +68,21 @@ const ListsKonfir = ({
   setModalData,
 }: ListKonfirMahasiswaParams) => {
   return (
-    <div className='bg-gray-300 rounded-xl flex text-base font-medium relative'>
-      <div className='w-[20%] md:w-[11%] rounded-l-xl flex items-center justify-center bg-red-400'>
-        <h2 className='font-bold'>Alpa</h2>
+    <div className='bg-white shadow rounded-xl flex flex-col text-base font-medium relative pb-6'>
+      <div className='w-full px-4 py-2 flex rounded-t-xl custom-gradient items-center justify-between'>
+        <h1 className='text-white font-semibold'>{matkul}</h1>
+        <div className='px-6 py-0.5 rounded-xl flex items-center justify-center bg-red-500'>
+          <p className='font-medium text-white'>Alpa</p>
+        </div>
       </div>
       <div className='flex flex-col space-y-1 px-2 py-1 '>
-        <h1>{matkul}</h1>
-        <h1>{tanggal}</h1>
+        <h1>
+          {new Date(tanggal).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })}
+        </h1>
         <h1>{jam + ' jam'}</h1>
       </div>
       <div className='absolute right-2 bottom-2 w-fit h-fit'>

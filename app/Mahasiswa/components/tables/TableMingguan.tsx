@@ -100,7 +100,7 @@ const TableMingguan = () => {
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const columns = React.useMemo<ColumnDef<DataKompen>[]>(
+  const columns = React.useMemo<ColumnDef<DataMingguan>[]>(
     () => [
       {
         accessorKey: 'No',

@@ -85,21 +85,21 @@ const ListsKonfir = ({
   setData,
 }: ListKonfirParams) => {
   return (
-    <div className='bg-gray-300 rounded-xl flex text-base font-medium relative'>
-      <div
-        className={clsx(
-          'w-[20%] md:w-[11%] rounded-l-xl flex items-center justify-center',
-          tipe === 'Izin' ? 'bg-yellow-400' : 'bg-blue-400'
-        )}
-      >
-        <h2 className='font-bold'>{tipe}</h2>
+    <div className='bg-white shadow rounded-xl flex flex-col text-base font-medium relative pb-6'>
+      <div className='w-full px-4 py-2 flex rounded-t-2xl custom-gradient items-center justify-between'>
+        <h1 className='text-white font-semibold'>{nama}</h1>
+        <div
+          className={clsx(
+            'rounded-xl flex items-center justify-center px-6 py-0.5',
+            tipe === 'Izin' ? 'bg-yellow-400' : 'bg-blue-400'
+          )}
+        >
+          <h2 className='font-medium text-white'>{tipe}</h2>
+        </div>
       </div>
       <div className='flex flex-col space-y-1 px-2 py-1 '>
-        <h1>{nama}</h1>
         <h1>{nim}</h1>
-        <h1>
-          {semester}/{kelas}
-        </h1>
+        <h1>{semester + '/' + kelas}</h1>
       </div>
       <div className='absolute right-2 bottom-2 w-fit h-fit'>
         <Button
@@ -108,7 +108,7 @@ const ListsKonfir = ({
             setVisible(true);
           }}
         >
-          Detail
+          Konfirmasi Kehadiran
         </Button>
       </div>
     </div>
